@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div :key="showNewDeviceDialog" class="container">
     <md-table
       v-model="searched"
       md-sort="name"
@@ -22,7 +22,7 @@
       </md-table-toolbar>
 
       <md-table-empty-state md-label="No devices found">
-        <md-button class="md-primary md-raised" @click="newDevice"
+        <md-button class="md-primary md-raised" @click="handleNewDevice"
           >Create New Device</md-button
         >
       </md-table-empty-state>
@@ -31,7 +31,7 @@
         slot="md-table-row"
         slot-scope="{ item }"
         md-selectable="single"
-        @click="handleChoose(item)"
+        @click="handleEditDevice(item)"
       >
         <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{
           item.id
@@ -51,16 +51,97 @@
       </md-table-row>
     </md-table>
 
-    <new-device-dialog
-      :key="showNewDeviceDialog"
-      :showDialog="showNewDeviceDialog"
-    />
+    <!-- ********************************************************* -->
+    <!--                     Create New Device                     -->
+    <!-- ********************************************************* -->
+
+    <md-dialog :md-active.sync="showNewDeviceDialog">
+      <md-dialog-title>Preferences</md-dialog-title>
+
+      <md-dialog-content class="body_dialog">
+        <md-field>
+          <label>Device type</label>
+          <md-input v-model="newDevice.deviceType"></md-input>
+        </md-field>
+
+        <md-field>
+          <label>Status</label>
+          <md-input v-model="newDevice.status"></md-input>
+        </md-field>
+
+        <md-field>
+          <label>Maximum Guess</label>
+          <md-input v-model="newDevice.maximumGuess"></md-input>
+        </md-field>
+
+        <md-field>
+          <label>Subcribe Time</label>
+          <md-input v-model="newDevice.subcribeTime"></md-input>
+        </md-field>
+
+        <md-field>
+          <label>Expired Time</label>
+          <md-input v-model="newDevice.expTime"></md-input>
+        </md-field>
+      </md-dialog-content>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="showNewDeviceDialog = false"
+          >Close</md-button
+        >
+        <md-button class="md-primary" @click="showNewDeviceDialog = false"
+          >Save</md-button
+        >
+      </md-dialog-actions>
+    </md-dialog>
+
+    <!-- ********************************************************* -->
+    <!--                      Edit Device                          -->
+    <!-- ********************************************************* -->
+
+    <md-dialog :md-active.sync="showEditDeviceDialog">
+      <md-dialog-title>Preferences</md-dialog-title>
+
+      <md-dialog-content class="body_dialog">
+        <md-field>
+          <label>Device type</label>
+          <md-input v-model="editDevice.deviceType"></md-input>
+        </md-field>
+
+        <md-field>
+          <label>Status</label>
+          <md-input v-model="editDevice.status"></md-input>
+        </md-field>
+
+        <md-field>
+          <label>Maximum Guess</label>
+          <md-input v-model="editDevice.maximumGuess"></md-input>
+        </md-field>
+
+        <md-field>
+          <label>Subcribe Time</label>
+          <md-input v-model="editDevice.subcribeTime"></md-input>
+        </md-field>
+
+        <md-field>
+          <label>Expired Time</label>
+          <md-input v-model="editDevice.expTime"></md-input>
+        </md-field>
+      </md-dialog-content>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="showEditDeviceDialog = false"
+          >Close</md-button
+        >
+        <md-button class="md-primary" @click="showEditDeviceDialog = false"
+          >Save</md-button
+        >
+      </md-dialog-actions>
+    </md-dialog>
   </div>
 </template>
 
 <script>
-import NewDeviceDialog from "./NewDevice.vue";
-
 const toLower = (text) => {
   return text.toString().toLowerCase();
 };
@@ -74,13 +155,26 @@ const searchByName = (items, term) => {
 
 export default {
   name: "ListDevice",
-  components: {
-    NewDeviceDialog,
-  },
+  components: {},
   data: () => ({
     search: null,
     searched: [],
     showNewDeviceDialog: false,
+    showEditDeviceDialog: false,
+    newDevice: {
+      deviceType: "",
+      status: 0,
+      maximumGuess: 0,
+      subcribeTime: "",
+      expTime: "",
+    },
+    editDevice: {
+      deviceType: "",
+      status: 0,
+      maximumGuess: 0,
+      subcribeTime: "",
+      expTime: "",
+    },
     devices: [
       {
         id: 1,
@@ -211,13 +305,14 @@ export default {
     ],
   }),
   methods: {
-    newDevice() {
-      this.newDevice = true;
-    },
     searchOnTable() {
       this.searched = searchByName(this.devices, this.search);
     },
-    handleChoose(item) {
+    handleNewDevice() {
+      this.showNewDeviceDialog = true;
+    },
+    handleEditDevice(item) {
+      this.showEditDeviceDialog = true;
       console.log(item);
     },
   },
@@ -231,5 +326,11 @@ export default {
 <style scoped>
 .md-field {
   max-width: 300px;
+}
+.body_dialog {
+  width: 500px;
+}
+.md-field {
+  max-width: 100%;
 }
 </style>

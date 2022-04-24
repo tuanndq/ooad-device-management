@@ -45,10 +45,15 @@ export default {
   },
   data() {
     return {
-      isLoggedIn: true,
       menuVisible: false,
     };
   },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters["getToken"] !== null;
+    },
+  },
+  mounted() {},
 };
 </script>
 
