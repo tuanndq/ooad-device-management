@@ -5,12 +5,12 @@
       <md-dialog-content class="body_form">
         <md-field>
           <label>Username</label>
-          <md-input></md-input>
+          <md-input v-model="username"></md-input>
         </md-field>
 
         <md-field>
           <label>Password</label>
-          <md-input type="password"></md-input>
+          <md-input v-model="password" type="password"></md-input>
         </md-field>
       </md-dialog-content>
       <md-dialog-actions>
@@ -26,10 +26,19 @@
 <script>
 export default {
   name: "Login",
+  data() {
+    return {
+      username: "",
+      password: "",
+    };
+  },
   methods: {
     handleLogin() {
       this.showDialog = false;
-      this.$store.dispatch("login", "abc");
+      this.$store.dispatch("login", {
+        username: this.username,
+        password: this.password,
+      });
     },
   },
 };

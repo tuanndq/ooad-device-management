@@ -1,3 +1,5 @@
+import { postApi } from "../../utils/api.config";
+
 const Auth = {
   state: () => ({
     token: null,
@@ -8,8 +10,28 @@ const Auth = {
     },
   },
   actions: {
-    login({ commit }, payload) {
-      commit("setToken", payload);
+    async login({ commit }, { username, password }) {
+      const response = await postApi(`/auth/login`, {
+        username,
+        password,
+      });
+
+      const { token } = response.data;
+
+      commit("setToken", token);
+    },
+
+    async register({ commit }, { username, password }) {
+      const response = await postApi(`/auth/register`, {
+        username,
+        password,
+      });
+
+      console.log(response.data);
+
+      const { token } = response.data;
+
+      commit("setToken", token);
     },
   },
   getters: {

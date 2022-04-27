@@ -12,6 +12,10 @@
           <h1 class="md-title">Devices</h1>
         </div>
 
+        <md-button class="md-primary md-raised" @click="handleNewDevice"
+          >Create New Device</md-button
+        >
+
         <md-field md-clearable class="md-toolbar-section-end">
           <md-input
             placeholder="Search by name..."
@@ -21,11 +25,7 @@
         </md-field>
       </md-table-toolbar>
 
-      <md-table-empty-state md-label="No devices found">
-        <md-button class="md-primary md-raised" @click="handleNewDevice"
-          >Create New Device</md-button
-        >
-      </md-table-empty-state>
+      <md-table-empty-state md-label="No devices found"> </md-table-empty-state>
 
       <md-table-row
         slot="md-table-row"
@@ -308,9 +308,19 @@ export default {
     searchOnTable() {
       this.searched = searchByName(this.devices, this.search);
     },
+
+    /*************************************/
+    /*             New device            */
+    /* ***********************************/
     handleNewDevice() {
       this.showNewDeviceDialog = true;
     },
+
+    createNewDevice() {},
+
+    /*************************************/
+    /*             Edit device           */
+    /* ***********************************/
     handleEditDevice(item) {
       this.showEditDeviceDialog = true;
       console.log(item);
