@@ -14,13 +14,7 @@
           <md-toolbar class="md-transparent" md-elevation="0">Menu</md-toolbar>
 
           <md-list>
-            <md-list-item
-              @click="
-                () => {
-                  isLoggedIn = false;
-                }
-              "
-            >
+            <md-list-item @click="handleLogout">
               <md-icon>logout</md-icon>
               <span class="md-list-item-text">Logout</span>
             </md-list-item>
@@ -47,6 +41,11 @@ export default {
     return {
       menuVisible: false,
     };
+  },
+  methods: {
+    handleLogout() {
+      this.$store.dispatch("logout");
+    },
   },
   computed: {
     isLoggedIn() {

@@ -15,9 +15,7 @@
       </md-dialog-content>
       <md-dialog-actions>
         <md-button class="md-primary" @click="handleLogin">Submit</md-button>
-        <md-button class="md-primary" @click="showDialog = false"
-          >Cancle</md-button
-        >
+        <md-button class="md-primary" @click="handleCancel">Cancle</md-button>
       </md-dialog-actions>
     </md-dialog>
   </div>
@@ -34,11 +32,13 @@ export default {
   },
   methods: {
     handleLogin() {
-      this.showDialog = false;
       this.$store.dispatch("login", {
         username: this.username,
         password: this.password,
       });
+    },
+    handleCancel() {
+      (this.username = ""), (this.password = "");
     },
   },
 };

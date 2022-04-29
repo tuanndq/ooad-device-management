@@ -4,6 +4,7 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 import Auth from "./module/auth";
+import Device from "./module/device";
 
 // Create a new store instance.
 const store = new Vuex.Store({
@@ -19,6 +20,7 @@ const store = new Vuex.Store({
   },
   modules: {
     auth: Auth,
+    device: Device,
   },
 });
 

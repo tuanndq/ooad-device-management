@@ -60,13 +60,26 @@
 
       <md-dialog-content class="body_dialog">
         <md-field>
-          <label>Device type</label>
-          <md-input v-model="newDevice.deviceType"></md-input>
+          <label for="deviceType">Device Type</label>
+          <md-select
+            v-model="newDevice.deviceType"
+            name="deviceType"
+            id="deviceType"
+          >
+            <md-option value="flightCar">Fight car</md-option>
+            <md-option value="flightBike">Flight bike</md-option>
+            <md-option value="drone">Drone</md-option>
+            <md-option value="plane">plane</md-option>
+          </md-select>
         </md-field>
 
         <md-field>
-          <label>Status</label>
-          <md-input v-model="newDevice.status"></md-input>
+          <label for="status">Status</label>
+          <md-select v-model="newDevice.status" name="status" id="status">
+            <md-option value="1">Active</md-option>
+            <md-option value="0">In-Active</md-option>
+            <md-option value="2">Maintenance</md-option>
+          </md-select>
         </md-field>
 
         <md-field>
@@ -104,13 +117,26 @@
 
       <md-dialog-content class="body_dialog">
         <md-field>
-          <label>Device type</label>
-          <md-input v-model="editDevice.deviceType"></md-input>
+          <label for="deviceType">Device Type</label>
+          <md-select
+            v-model="editDevice.deviceType"
+            name="deviceType"
+            id="deviceType"
+          >
+            <md-option value="flightCar">Fight car</md-option>
+            <md-option value="flightBike">Flight bike</md-option>
+            <md-option value="drone">Drone</md-option>
+            <md-option value="plane">plane</md-option>
+          </md-select>
         </md-field>
 
         <md-field>
-          <label>Status</label>
-          <md-input v-model="editDevice.status"></md-input>
+          <label for="status">Status</label>
+          <md-select v-model="editDevice.status" name="status" id="status">
+            <md-option value="1">Active</md-option>
+            <md-option value="0">In-Active</md-option>
+            <md-option value="2">Maintenance</md-option>
+          </md-select>
         </md-field>
 
         <md-field>
@@ -161,6 +187,22 @@ export default {
     searched: [],
     showNewDeviceDialog: false,
     showEditDeviceDialog: false,
+    deviceTypeOptions: [
+      "Jim Halpert",
+      "Dwight Schrute",
+      "Michael Scott",
+      "Pam Beesly",
+      "Angela Martin",
+      "Kelly Kapoor",
+      "Ryan Howard",
+      "Kevin Malone",
+      "Creed Bratton",
+      "Oscar Nunez",
+      "Toby Flenderson",
+      "Stanley Hudson",
+      "Meredith Palmer",
+      "Phyllis Lapin-Vance",
+    ],
     newDevice: {
       deviceType: "",
       status: 0,
@@ -175,134 +217,6 @@ export default {
       subcribeTime: "",
       expTime: "",
     },
-    devices: [
-      {
-        id: 1,
-        name: "Shawna Dubbin",
-        email: "sdubbin0@geocities.com",
-        gender: "Male",
-        title: "Assistant Media Planner",
-      },
-      {
-        id: 2,
-        name: "Odette Demageard",
-        email: "odemageard1@spotify.com",
-        gender: "Female",
-        title: "Account Coordinator",
-      },
-      {
-        id: 3,
-        name: "Vera Taleworth",
-        email: "vtaleworth2@google.ca",
-        gender: "Male",
-        title: "Community Outreach Specialist",
-      },
-      {
-        id: 4,
-        name: "Lonnie Izkovitz",
-        email: "lizkovitz3@youtu.be",
-        gender: "Female",
-        title: "Operator",
-      },
-      {
-        id: 5,
-        name: "Thatcher Stave",
-        email: "tstave4@reference.com",
-        gender: "Male",
-        title: "Software Test Engineer III",
-      },
-      {
-        id: 6,
-        name: "Karim Chipping",
-        email: "kchipping5@scribd.com",
-        gender: "Female",
-        title: "Safety Technician II",
-      },
-      {
-        id: 7,
-        name: "Helge Holyard",
-        email: "hholyard6@howstuffworks.com",
-        gender: "Female",
-        title: "Internal Auditor",
-      },
-      {
-        id: 8,
-        name: "Rod Titterton",
-        email: "rtitterton7@nydailynews.com",
-        gender: "Male",
-        title: "Technical Writer",
-      },
-      {
-        id: 9,
-        name: "Gawen Applewhite",
-        email: "gapplewhite8@reverbnation.com",
-        gender: "Female",
-        title: "GIS Technical Architect",
-      },
-      {
-        id: 10,
-        name: "Nero Mulgrew",
-        email: "nmulgrew9@plala.or.jp",
-        gender: "Female",
-        title: "Staff Scientist",
-      },
-      {
-        id: 11,
-        name: "Cybill Rimington",
-        email: "crimingtona@usnews.com",
-        gender: "Female",
-        title: "Assistant Professor",
-      },
-      {
-        id: 12,
-        name: "Maureene Eggleson",
-        email: "megglesonb@elpais.com",
-        gender: "Male",
-        title: "Recruiting Manager",
-      },
-      {
-        id: 13,
-        name: "Cortney Caulket",
-        email: "ccaulketc@cbsnews.com",
-        gender: "Male",
-        title: "Safety Technician IV",
-      },
-      {
-        id: 14,
-        name: "Selig Swynfen",
-        email: "sswynfend@cpanel.net",
-        gender: "Female",
-        title: "Environmental Specialist",
-      },
-      {
-        id: 15,
-        name: "Ingar Raggles",
-        email: "iragglese@cbc.ca",
-        gender: "Female",
-        title: "VP Sales",
-      },
-      {
-        id: 16,
-        name: "Karmen Mines",
-        email: "kminesf@topsy.com",
-        gender: "Male",
-        title: "Administrative Officer",
-      },
-      {
-        id: 17,
-        name: "Salome Judron",
-        email: "sjudrong@jigsy.com",
-        gender: "Male",
-        title: "Staff Scientist",
-      },
-      {
-        id: 18,
-        name: "Clarinda Marieton",
-        email: "cmarietonh@theatlantic.com",
-        gender: "Male",
-        title: "Paralegal",
-      },
-    ],
   }),
   methods: {
     searchOnTable() {
@@ -316,7 +230,9 @@ export default {
       this.showNewDeviceDialog = true;
     },
 
-    createNewDevice() {},
+    createNewDevice() {
+      this.$store.dispatch("createDevice", this.newDevice);
+    },
 
     /*************************************/
     /*             Edit device           */
@@ -326,9 +242,16 @@ export default {
       console.log(item);
     },
   },
-  computed: {},
+  computed: {
+    devices() {
+      return this.$store.getters["getDevices"];
+    },
+  },
   created() {
     this.searched = this.devices;
+  },
+  mounted() {
+    this.$store.dispatch("getDevices");
   },
 };
 </script>

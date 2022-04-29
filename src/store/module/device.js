@@ -1,6 +1,6 @@
 import { deleteApi, getApi, postApi, putApi } from "../../utils/api.config";
 
-const Auth = {
+const Device = {
   state: () => ({
     devices: [],
     detailDevice: {},
@@ -17,16 +17,15 @@ const Auth = {
     async getDevices({ commit }) {
       try {
         const response = await getApi("/device");
+        console.log(response);
         commit("setDevices", response.data);
       } catch (err) {
         console.log(err);
-      } finally {
-        alert("Get list Devices error.");
       }
     },
 
     async getDetailsDevice({ commit }, deviceId) {
-      const response = await getApi(`/device/details/${id}`);
+      const response = await getApi(`/device/details/${deviceId}`);
       commit("setDetailsDevice", response.data);
     },
 
@@ -49,7 +48,7 @@ const Auth = {
       dispatch("getDevices");
     },
 
-    async deleteDevice({ dispatch }) {
+    async deleteDevice({ dispatch }, deviceId) {
       await deleteApi(`/device/${deviceId}`);
       dispatch("getDevices");
     },
@@ -64,4 +63,4 @@ const Auth = {
   },
 };
 
-export default Auth;
+export default Device;
