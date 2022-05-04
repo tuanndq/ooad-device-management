@@ -1,9 +1,9 @@
 import { postApi } from "../../utils/api.config";
 
 const Auth = {
-  state: () => ({
-    token: JSON.parse(localStorage.getItem("token")),
-  }),
+  state: {
+    token: localStorage.getItem("token"),
+  },
   mutations: {
     setToken(state, token) {
       state.token = token;
@@ -17,7 +17,7 @@ const Auth = {
       });
 
       const { token } = response.data;
-      localStorage.setItem("token", JSON.stringify(token));
+      localStorage.setItem("token", token);
       commit("setToken", token);
     },
 

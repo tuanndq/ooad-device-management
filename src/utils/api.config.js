@@ -4,9 +4,9 @@ const instance = axios.create({
   baseURL: "http://localhost:3000",
 });
 
-const token = localStorage.getItem("token") || "token";
+const getToken = () => localStorage.getItem("token");
 
-instance.defaults.headers.common["Authorization"] = token;
+instance.defaults.headers.common["Authorization"] = `Bearer ${getToken()}`;
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded";
 

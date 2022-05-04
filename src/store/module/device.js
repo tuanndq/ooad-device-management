@@ -1,10 +1,10 @@
 import { deleteApi, getApi, postApi, putApi } from "../../utils/api.config";
 
 const Device = {
-  state: () => ({
+  state: {
     devices: [],
     detailDevice: {},
-  }),
+  },
   mutations: {
     setDevices(state, devices) {
       state.devices = devices;
@@ -17,7 +17,6 @@ const Device = {
     async getDevices({ commit }) {
       try {
         const response = await getApi("/device");
-        console.log(response);
         commit("setDevices", response.data);
       } catch (err) {
         console.log(err);
@@ -31,16 +30,30 @@ const Device = {
 
     async createDevice(
       { state, commit },
-      { deviceType, status, maximumGuess, subcribeTime, expTime }
+      { type, name, status, maximumGuess, subcribeTime, expTime }
     ) {
-      const response = await postApi("/device", {
-        deviceType,
-        status,
-        maximumGuess,
-        subcribeTime,
-        expTime,
-      });
-      commit("setDevices", [...state.devices, response.data]);
+      let isSuccess = true;
+      let errorMessage = null;
+      try {
+        const response = await postApi("/device", {
+          type,
+          name,
+          status,
+          maximumGuess,
+          subcribeTime,
+          expTime,
+        });
+        commit("setDevices", [...state.devices, response.data]);
+      } catch (err) {
+        isSuccess = false;
+        errorMessage = err.response.data.message;
+      } finally {
+        if (!isSuccess) {
+          alert(`ERROR: ${errorMessage}`);
+        } else {
+          alert("Create new device successfully.");
+        }
+      }
     },
 
     async updateDevice({ dispatch }, { deviceId, data }) {
@@ -55,7 +68,7 @@ const Device = {
   },
   getters: {
     getDevices(state) {
-      return state.devices;
+      return state;
     },
     getDetailsDevice(state) {
       return state.detailDevice;

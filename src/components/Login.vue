@@ -1,23 +1,29 @@
 <template>
   <div>
-    <md-dialog :md-active="true" class="container">
-      <md-dialog-title>Login</md-dialog-title>
-      <md-dialog-content class="body_form">
-        <md-field>
-          <label>Username</label>
-          <md-input v-model="username"></md-input>
-        </md-field>
+    <form @submit.prevent="handleLogin">
+      <md-dialog :md-active="true" class="container">
+        <md-dialog-title>Login</md-dialog-title>
+        <md-dialog-content class="body_form">
+          <md-field>
+            <label>Username</label>
+            <md-input v-model="username"></md-input>
+          </md-field>
 
-        <md-field>
-          <label>Password</label>
-          <md-input v-model="password" type="password"></md-input>
-        </md-field>
-      </md-dialog-content>
-      <md-dialog-actions>
-        <md-button class="md-primary" @click="handleLogin">Submit</md-button>
-        <md-button class="md-primary" @click="handleCancel">Cancle</md-button>
-      </md-dialog-actions>
-    </md-dialog>
+          <md-field>
+            <label>Password</label>
+            <md-input
+              v-model="password"
+              type="password"
+              v-on:keyup.enter="handleLogin"
+            ></md-input>
+          </md-field>
+        </md-dialog-content>
+        <md-dialog-actions>
+          <md-button class="md-primary" @click="handleLogin">Submit</md-button>
+          <md-button class="md-primary" @click="handleCancel">Cancle</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+    </form>
   </div>
 </template>
 

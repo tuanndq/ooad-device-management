@@ -39,14 +39,24 @@
         <md-table-cell md-label="Name" md-sort-by="name">{{
           item.name
         }}</md-table-cell>
-        <md-table-cell md-label="Email" md-sort-by="email">{{
-          item.email
+        <md-table-cell md-label="Type" md-sort-by="type">{{
+          item.type
         }}</md-table-cell>
-        <md-table-cell md-label="Gender" md-sort-by="gender">{{
-          item.gender
+        <md-table-cell md-label="Maximum Guess" md-sort-by="maximumGuess">{{
+          item.maximumGuess
         }}</md-table-cell>
-        <md-table-cell md-label="Job Title" md-sort-by="title">{{
-          item.title
+        <md-table-cell md-label="Status" md-sort-by="status">{{
+          item.status === 1
+            ? "Active"
+            : item.status === 0
+            ? "In-Active"
+            : "Maintenance"
+        }}</md-table-cell>
+        <md-table-cell md-label="Subcribe Time" md-sort-by="subcribeTime">{{
+          new Date(item.subcribeTime).toLocaleDateString()
+        }}</md-table-cell>
+        <md-table-cell md-label="Expired Time" md-sort-by="expTime">{{
+          new Date(item.expTime).toLocaleDateString()
         }}</md-table-cell>
       </md-table-row>
     </md-table>
@@ -61,16 +71,17 @@
       <md-dialog-content class="body_dialog">
         <md-field>
           <label for="deviceType">Device Type</label>
-          <md-select
-            v-model="newDevice.deviceType"
-            name="deviceType"
-            id="deviceType"
-          >
+          <md-select v-model="newDevice.type" name="deviceType" id="deviceType">
             <md-option value="flightCar">Fight car</md-option>
             <md-option value="flightBike">Flight bike</md-option>
             <md-option value="drone">Drone</md-option>
             <md-option value="plane">plane</md-option>
           </md-select>
+        </md-field>
+
+        <md-field>
+          <label>Device Name</label>
+          <md-input v-model="newDevice.name"></md-input>
         </md-field>
 
         <md-field>
@@ -87,24 +98,20 @@
           <md-input v-model="newDevice.maximumGuess"></md-input>
         </md-field>
 
-        <md-field>
+        <md-datepicker v-model="newDevice.subcribeTime" md-immediately>
           <label>Subcribe Time</label>
-          <md-input v-model="newDevice.subcribeTime"></md-input>
-        </md-field>
+        </md-datepicker>
 
-        <md-field>
+        <md-datepicker v-model="newDevice.expTime" md-immediately>
           <label>Expired Time</label>
-          <md-input v-model="newDevice.expTime"></md-input>
-        </md-field>
+        </md-datepicker>
       </md-dialog-content>
 
       <md-dialog-actions>
         <md-button class="md-primary" @click="showNewDeviceDialog = false"
           >Close</md-button
         >
-        <md-button class="md-primary" @click="showNewDeviceDialog = false"
-          >Save</md-button
-        >
+        <md-button class="md-primary" @click="createNewDevice">Save</md-button>
       </md-dialog-actions>
     </md-dialog>
 
@@ -119,7 +126,7 @@
         <md-field>
           <label for="deviceType">Device Type</label>
           <md-select
-            v-model="editDevice.deviceType"
+            v-model="editDevice.type"
             name="deviceType"
             id="deviceType"
           >
@@ -128,6 +135,11 @@
             <md-option value="drone">Drone</md-option>
             <md-option value="plane">plane</md-option>
           </md-select>
+        </md-field>
+
+        <md-field>
+          <label>Device Name</label>
+          <md-input v-model="editDevice.name"></md-input>
         </md-field>
 
         <md-field>
@@ -144,24 +156,20 @@
           <md-input v-model="editDevice.maximumGuess"></md-input>
         </md-field>
 
-        <md-field>
+        <md-datepicker v-model="editDevice.subcribeTime" md-immediately>
           <label>Subcribe Time</label>
-          <md-input v-model="editDevice.subcribeTime"></md-input>
-        </md-field>
+        </md-datepicker>
 
-        <md-field>
+        <md-datepicker v-model="editDevice.expTime" md-immediately>
           <label>Expired Time</label>
-          <md-input v-model="editDevice.expTime"></md-input>
-        </md-field>
+        </md-datepicker>
       </md-dialog-content>
 
       <md-dialog-actions>
         <md-button class="md-primary" @click="showEditDeviceDialog = false"
           >Close</md-button
         >
-        <md-button class="md-primary" @click="showEditDeviceDialog = false"
-          >Save</md-button
-        >
+        <md-button class="md-primary" @click="onEditDevice">Update</md-button>
       </md-dialog-actions>
     </md-dialog>
   </div>
@@ -185,33 +193,21 @@ export default {
   data: () => ({
     search: null,
     searched: [],
+    devices: [],
     showNewDeviceDialog: false,
     showEditDeviceDialog: false,
-    deviceTypeOptions: [
-      "Jim Halpert",
-      "Dwight Schrute",
-      "Michael Scott",
-      "Pam Beesly",
-      "Angela Martin",
-      "Kelly Kapoor",
-      "Ryan Howard",
-      "Kevin Malone",
-      "Creed Bratton",
-      "Oscar Nunez",
-      "Toby Flenderson",
-      "Stanley Hudson",
-      "Meredith Palmer",
-      "Phyllis Lapin-Vance",
-    ],
     newDevice: {
-      deviceType: "",
+      name: "",
+      type: "",
       status: 0,
       maximumGuess: 0,
       subcribeTime: "",
       expTime: "",
     },
     editDevice: {
-      deviceType: "",
+      id: null,
+      name: "",
+      type: "",
       status: 0,
       maximumGuess: 0,
       subcribeTime: "",
@@ -230,8 +226,21 @@ export default {
       this.showNewDeviceDialog = true;
     },
 
-    createNewDevice() {
-      this.$store.dispatch("createDevice", this.newDevice);
+    async createNewDevice() {
+      this.showNewDeviceDialog = false;
+      const { type, name, status, maximumGuess, subcribeTime, expTime } =
+        this.newDevice;
+      const data = {
+        type,
+        name,
+        status,
+        maximumGuess,
+        subcribeTime,
+        expTime,
+      };
+      data.subcribeTime = new Date(this.newDevice.subcribeTime).toISOString();
+      data.expTime = new Date(this.newDevice.expTime).toISOString();
+      await this.$store.dispatch("createDevice", data);
     },
 
     /*************************************/
@@ -239,29 +248,40 @@ export default {
     /* ***********************************/
     handleEditDevice(item) {
       this.showEditDeviceDialog = true;
-      console.log(item);
+      this.editDevice = {
+        id: item.id,
+        name: item.name,
+        type: item.type,
+        status: item.status,
+        maximumGuess: item.maximumGuess,
+        subcribeTime: item.subcribeTime,
+        expTime: item.expTime,
+      };
+    },
+
+    async onEditDevice() {
+      await this.$store.dispatch("updateDevice", {
+        deviceId: this.editDevice.id,
+        data: this.editDevice,
+      });
+      this.showEditDeviceDialog = false;
     },
   },
-  computed: {
-    devices() {
-      return this.$store.getters["getDevices"];
-    },
-  },
-  created() {
-    this.searched = this.devices;
-  },
-  mounted() {
-    this.$store.dispatch("getDevices");
+  computed: {},
+  created() {},
+  async mounted() {
+    await this.$store.dispatch("getDevices");
+    const { devices } = this.$store.getters["getDevices"];
+    this.devices = devices;
+    this.searched = devices;
   },
 };
 </script>
 
 <style scoped>
-.md-field {
-  max-width: 300px;
-}
 .body_dialog {
   width: 500px;
+  overflow-y: hidden;
 }
 .md-field {
   max-width: 100%;

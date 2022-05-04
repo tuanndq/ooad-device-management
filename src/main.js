@@ -11,6 +11,12 @@ Vue.use(VueMaterial);
 
 Vue.config.productionTip = false;
 
+Vue.config.errorHandler = (err) => {
+  if (err.message !== "Cannot read property 'badInput' of undefined") {
+    console.error(err);
+  }
+};
+
 new Vue({
   store,
   render: (h) => h(App),
